@@ -8,7 +8,10 @@
                  [clj-http "3.10.1"]
                  [clojurewerkz/elastisch "3.0.1"]
                  [slingshot "0.12.2"]
-                 [cheshire "5.10.0"]]
+                 [cheshire "5.10.0"]
+                 [org.clojure/core.async "1.2.603"]
+                 [com.taoensso/timbre "4.10.0"]
+                 [yogthos/config "1.1.7"]]
   :main ^:skip-aot graphite-to-elastic-relay.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}}
