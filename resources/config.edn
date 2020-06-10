@@ -1,7 +1,7 @@
 {
  ;---- graphite
  :graphite-url "http://localhost:8081"
- :graphite-metrics ["*"]
+ :graphite-metrics []
  ;---- elastic
  :elastic-url "http://localhost:9200"
  ;:elastic-auth ["user" "password"]

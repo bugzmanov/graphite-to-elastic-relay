@@ -26,9 +26,12 @@
 (defn- all-created? [xs]
   (every? created? xs))
 
+(defn- convert-date [epoch-seconds]
+  (.format java.time.format.DateTimeFormatter/ISO_INSTANT (java.time.Instant/ofEpochSecond epoch-seconds)))
+
 (defn- create-doc [metric]
   (merge
-   {"@timestamp" (:timestamp metric) :name (:name metric) :value (:value metric)}
+   {"@timestamp" (convert-date (:timestamp metric)) :name (:name metric) :value (:value metric)}
    (:tags metric)))
 
 (defn send-metrics [url index-name opts metrics]

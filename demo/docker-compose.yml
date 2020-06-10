@@ -12,8 +12,6 @@ services:
       - "80"
       - "2003"
       - "2004"
-#    networks:
-#      - metrics-tier
     ports:
       - "2003:2003"
       - "2004:2004"
@@ -29,19 +27,6 @@ services:
       - "9200"
     ports:
       - 9200:9200
-#    networks:
-#      - metrics-tier
-
-  grafana:
-    build: './grafana'
-    container_name: 'grafana'
-    links:
-      - graphite
-      - elasticsearch
-    ports:
-      - '3000:3000'
-#    networks:
-#      - metrics-tier
 
   relay:
     image: bugzmanov/graphite-elastic-relay:0.1
@@ -51,3 +36,20 @@ services:
     environment:
       - GRAPHITE_URL=http://graphite:80
       - ELASTIC_URL=http://elasticsearch:9200
+      - METRICS_INDEX=xmetrix
+      - GRAPHITE_METRICS=["stats_counts.statsd.*" "*.agents.*.*"]
+    depends_on:
+      - elasticsearch
+      - graphite
+
+
+  grafana:
+    build: './grafana'
+    links:
+      - graphite
+      - elasticsearch
+    ports:
+      - '3000:3000'
+#    networks:
+#      - metrics-tier
+

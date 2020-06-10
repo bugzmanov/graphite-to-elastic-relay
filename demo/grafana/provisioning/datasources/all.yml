@@ -17,10 +17,10 @@ datasources:
   - name: 'elasticsearch'
     type: 'elasticsearch'
     access: 'proxy'
-    database: "[metrics-]YYYY-MM-DD"
+    database: "xmetrix"
     url: http://elasticsearch:9200
     is_default: true
     jsonData:
       esVersion: 70
-      interval: "Daily"
+#      interval: "Daily"
       timeField: "@timestamp"
