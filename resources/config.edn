@@ -1,10 +1,12 @@
-{:graphite-url "http://localhost:8081"
+{
+ ;---- graphite
+ :graphite-url "http://localhost:8081"
  :graphite-metrics ["*"]
-
+ ;---- elastic
  :elastic-url "http://localhost:9200"
  ;:elastic-auth ["user" "password"]
  :metrics-index "xmetrix"
-
+ ;----- sync process config
  :poll-period-seconds 10
  :restore-missing-data-on-startup false
  :missing-data-age-limit-hours 24
