@@ -16,10 +16,14 @@
 
   (let [url (:elastic-url cfg)
         index (:metrics-index cfg)
-        send-metrics (elastic/with-dedup (elastic/get-latest-metrics url index) elastic/send-metrics)]
+        auth (:elastic-auth cfg)
+        opts {:basic-auth auth}
+        send-metrics (elastic/with-dedup (elastic/get-latest-metrics url opts index) elastic/send-metrics)]
 
     (async/go-loop []
       (let [metrics (<! metrics-chan)]
-        (async/thread (send-metrics url index metrics))
-        (timbre/info "Send metrics"))
-      (recur))))
+        (if-not (empty? metrics)
+          (do
+            (async/thread (send-metrics url index opts metrics))
+            (timbre/info "Send metrics")))
+        (recur)))))

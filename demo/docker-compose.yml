@@ -1,0 +1,53 @@
+version: '2'
+
+#networks:
+#  app-tier:
+#    external:
+#      name: metrics-tier
+
+services:
+  graphite:
+    image: 'graphiteapp/graphite-statsd'
+    expose:
+      - "80"
+      - "2003"
+      - "2004"
+#    networks:
+#      - metrics-tier
+    ports:
+      - "2003:2003"
+      - "2004:2004"
+      - "8081:80"
+
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    expose:
+      - "9200"
+    ports:
+      - 9200:9200
+#    networks:
+#      - metrics-tier
+
+  grafana:
+    build: './grafana'
+    container_name: 'grafana'
+    links:
+      - graphite
+      - elasticsearch
+    ports:
+      - '3000:3000'
+#    networks:
+#      - metrics-tier
+
+  relay:
+    image: bugzmanov/graphite-elastic-relay:0.1
+    links:
+      - graphite
+      - elasticsearch
+    environment:
+      - GRAPHITE_URL=http://graphite:80
+      - ELASTIC_URL=http://elasticsearch:9200

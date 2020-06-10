@@ -14,8 +14,8 @@
 (defn- extract-elastic-metric [docs]
   (map (fn [doc] {(:key doc) (->> doc :theMax :value long (* 1000))}) docs))
 
-(defn get-latest-metrics [url index-name]
-  (let [conn     (rest/connect url {:content-type :application/json})
+(defn get-latest-metrics [url opts index-name]
+  (let [conn     (rest/connect url (merge {:content-type :application/json} opts))
         response (try+ (doc/search conn index-name nil {:size 0
                                                         :aggs {:yourGroup (merge
                                                                            (a/terms "name.keyword" {:size 1000})
@@ -31,8 +31,8 @@
    {"@timestamp" (:timestamp metric) :name (:name metric) :value (:value metric)}
    (:tags metric)))
 
-(defn send-metrics [url index-name metrics]
-  (let [conn              (rest/connect url {:content-type :application/json})
+(defn send-metrics [url index-name opts metrics]
+  (let [conn              (rest/connect url (merge {:content-type :application/json} opts))
         documents         (map create-doc metrics)
         for-index         (map (fn [doc] (assoc doc :_type index-type)) documents)
         insert-operations (bulk/bulk-index for-index)
@@ -53,9 +53,9 @@
 
 (defn with-dedup [initial-metrics fn-send]
   (let [state (atom initial-metrics)]
-    (fn deduped-send [url index metrics]
+    (fn deduped-send [url index opts metrics]
       (let [dedupped (drop-old-metrics @state metrics)]
-        (fn-send url index dedupped)
+        (fn-send url index opts dedupped)
         (reset! state (recalc-state dedupped))))))
 
 

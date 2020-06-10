@@ -1,7 +1,11 @@
 {:graphite-url "http://localhost:8081"
+ :graphite-metrics ["*"]
+
  :elastic-url "http://localhost:9200"
+ ;:elastic-auth ["user" "password"]
+ :metrics-index "xmetrix"
+
  :poll-period-seconds 10
  :restore-missing-data-on-startup false
  :missing-data-age-limit-hours 24
- :metrics-index "xmetrix"
- :graphite-metrics ["jvm.memory.max.area.*.*.*"]}
+}

@@ -14,5 +14,5 @@
                  [yogthos/config "1.1.7"]]
   :main ^:skip-aot graphite-to-elastic-relay.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}}
+  :profiles {:uberjar {:aot :all :uberjar-name "graphite-to-elastic-relay.jar"}}
   :repl-options {:init-ns graphite-to-elastic-relay.core})

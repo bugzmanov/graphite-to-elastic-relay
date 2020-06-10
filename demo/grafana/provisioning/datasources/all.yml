@@ -1,0 +1,26 @@
+apiVersion: 1
+
+deleteDatasources:
+  - name: Prometheus
+    orgId: 1
+
+datasources:
+  - name: 'graphite'
+    type: 'graphite'
+    access: 'proxy'
+    org_id: 1
+    url: 'http://graphite:80'
+    is_default: false
+    version: 1
+    editable: true
+
+  - name: 'elasticsearch'
+    type: 'elasticsearch'
+    access: 'proxy'
+    database: "[metrics-]YYYY-MM-DD"
+    url: http://elasticsearch:9200
+    is_default: true
+    jsonData:
+      esVersion: 70
+      interval: "Daily"
+      timeField: "@timestamp"
